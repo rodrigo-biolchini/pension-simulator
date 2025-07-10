@@ -33,7 +33,6 @@ export function DynamicForm() {
     setValue,
     watch,
     formState: { errors },
-    reset,
   } = useForm<FormData>({
     defaultValues: {
       initialInvestment: 0,

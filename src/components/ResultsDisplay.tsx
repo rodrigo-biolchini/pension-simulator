@@ -4,7 +4,6 @@ import React from 'react';
 import { FINANCIAL_CONSTANTS } from '@/constants';
 import { useLastResult, useSelectedScenario } from '@/contexts/AppContext';
 import { formatCurrency } from '@/utils/calculations';
-import { SCENARIO_OPTIONS } from '@/constants';
 import { CheckCircle, XCircle, TrendingUp, Calendar, DollarSign } from 'lucide-react';
 
 export function ResultsDisplay() {
@@ -14,8 +13,6 @@ export function ResultsDisplay() {
   if (!lastResult || !selectedScenario) {
     return null;
   }
-  
-  const scenario = SCENARIO_OPTIONS.find(s => s.id === selectedScenario);
   
   if (!lastResult.success) {
     return (

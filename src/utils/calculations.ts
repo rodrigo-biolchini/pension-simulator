@@ -132,7 +132,7 @@ export function calculateMonthlyContribution(
         monthlyContribution,
       },
     };
-  } catch (error) {
+  } catch {
     return { 
       success: false, 
       error: 'Calculation error occurred' 
@@ -183,7 +183,7 @@ export function calculateFinalAmount(
         monthlyContribution,
       },
     };
-  } catch (error) {
+  } catch {
     return { 
       success: false, 
       error: 'Calculation error occurred' 
@@ -249,7 +249,7 @@ export function calculateRetirementPlanning(
         monthlyContribution: requiredMonthlyContribution,
       },
     };
-  } catch (error) {
+  } catch {
     return { 
       success: false, 
       error: 'Calculation error occurred' 

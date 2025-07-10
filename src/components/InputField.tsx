@@ -1,14 +1,14 @@
 'use client';
 
 import React from 'react';
-import { UseFormRegister, FieldError } from 'react-hook-form';
+import { UseFormRegister, FieldError, Path } from 'react-hook-form';
 
-interface InputFieldProps {
+interface InputFieldProps<T extends Record<string, unknown>> {
   label: string;
-  name: string;
+  name: Path<T>;
   type?: 'text' | 'number' | 'email';
   placeholder?: string;
-  register: UseFormRegister<any>;
+  register: UseFormRegister<T>;
   error?: FieldError;
   required?: boolean;
   min?: number;
@@ -17,7 +17,7 @@ interface InputFieldProps {
   className?: string;
 }
 
-export function InputField({
+export function InputField<T extends Record<string, unknown>>({
   label,
   name,
   type = 'number',
@@ -29,7 +29,7 @@ export function InputField({
   max,
   step = 0.01,
   className = '',
-}: InputFieldProps) {
+}: InputFieldProps<T>) {
   const inputId = `input-${name}`;
   
   return (

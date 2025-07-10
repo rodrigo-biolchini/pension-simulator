@@ -1,15 +1,15 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { UseFormRegister, FieldError, UseFormSetValue, UseFormWatch } from 'react-hook-form';
+import { UseFormRegister, FieldError, UseFormSetValue, UseFormWatch, Path } from 'react-hook-form';
 
-interface CurrencyInputProps {
+interface CurrencyInputProps<T extends Record<string, unknown>> {
   label: string;
-  name: string;
+  name: Path<T>;
   placeholder?: string;
-  register: UseFormRegister<any>;
-  setValue: UseFormSetValue<any>;
-  watch: UseFormWatch<any>;
+  register: UseFormRegister<T>;
+  setValue: UseFormSetValue<T>;
+  watch: UseFormWatch<T>;
   error?: FieldError;
   required?: boolean;
   min?: number;
@@ -17,7 +17,7 @@ interface CurrencyInputProps {
   className?: string;
 }
 
-export function CurrencyInput({
+export function CurrencyInput<T extends Record<string, number | undefined>>({
   label,
   name,
   placeholder,
@@ -29,7 +29,7 @@ export function CurrencyInput({
   min = 0,
   max = 10000000,
   className = '',
-}: CurrencyInputProps) {
+}: CurrencyInputProps<T>) {
   const [displayValue, setDisplayValue] = useState('R$ 0,00');
   const watchedValue = watch(name);
   const inputId = `input-${name}`;
@@ -61,7 +61,7 @@ export function CurrencyInput({
   // Initialize the form value to 0 if it's undefined
   useEffect(() => {
     if (watchedValue === undefined || watchedValue === null) {
-      setValue(name, 0, { shouldValidate: false });
+      (setValue as (name: Path<T>, value: number) => void)(name, 0);
     }
   }, [name, setValue, watchedValue]);
 
@@ -81,7 +81,7 @@ export function CurrencyInput({
     setDisplayValue(formatCurrency(currencyValue));
     
     // Update form value
-    setValue(name, currencyValue, { shouldValidate: true });
+    (setValue as (name: Path<T>, value: number, options?: object) => void)(name, currencyValue, { shouldValidate: true });
   };
 
   const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {

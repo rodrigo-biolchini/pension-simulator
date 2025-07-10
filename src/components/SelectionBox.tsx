@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { ScenarioOption, SimulationScenario } from '@/types';
+import { ScenarioOption } from '@/types';
 import { useSelectedScenario, useApp } from '@/contexts/AppContext';
 import * as Icons from 'lucide-react';
 
