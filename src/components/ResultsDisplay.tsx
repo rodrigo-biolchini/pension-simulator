@@ -186,7 +186,7 @@ export function ResultsDisplay() {
             Importante:
           </h4>
           <ul className="text-sm text-blue-800 space-y-1">
-            <li>• Taxa de retorno considerada: {FINANCIAL_CONSTANTS.ANNUAL_RETURN_RATE * 100}% ao ano</li>
+            <li>• Taxa de retorno real considerada: {FINANCIAL_CONSTANTS.ANNUAL_RETURN_RATE * 100}% ao ano</li>
             <li>• Período de aposentadoria: {FINANCIAL_CONSTANTS.RETIREMENT_PERIOD_YEARS} anos</li>
             <li>• Valores não consideram inflação</li>
             <li>• Esta é uma simulação para fins educativos</li>
