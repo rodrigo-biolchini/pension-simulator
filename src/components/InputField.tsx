@@ -27,7 +27,7 @@ export function InputField<T extends Record<string, unknown>>({
   required = false,
   min,
   max,
-  step = 0.01,
+  step = 1,
   className = '',
 }: InputFieldProps<T>) {
   const inputId = `input-${name}`;

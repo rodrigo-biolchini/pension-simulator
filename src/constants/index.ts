@@ -39,7 +39,7 @@ export const VALIDATION_CONSTANTS = {
   MIN_RETIREMENT_AGE: 50,
   MAX_RETIREMENT_AGE: 100,
   MIN_AMOUNT: 0,
-  MAX_AMOUNT: 10000000, // 10 million
+  MAX_AMOUNT: 1000000000, // 1 billion
 } as const;
 
 // Currency formatting
