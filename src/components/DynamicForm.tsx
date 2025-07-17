@@ -4,8 +4,9 @@ import React from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { InputField } from './InputField';
 import { CurrencyInput } from './CurrencyInput';
+import { SelectInput } from './SelectInput';
 import { useSelectedScenario, useApp, useIsCalculating } from '@/contexts/AppContext';
-import { VALIDATION_CONSTANTS } from '@/constants';
+import { VALIDATION_CONSTANTS, GENDER_OPTIONS } from '@/constants';
 import { 
   calculateMonthlyContribution, 
   calculateFinalAmount, 
@@ -16,6 +17,7 @@ import { Loader2 } from 'lucide-react';
 type FormData = {
   currentAge: number;
   retirementAge: number;
+  sex: 'male' | 'female' | '';
   initialInvestment: number;
   desiredFinalAmount?: number;
   monthlyContribution?: number;
@@ -33,6 +35,7 @@ export function DynamicForm() {
     setValue,
     watch,
     formState: { errors },
+    reset,
   } = useForm<FormData>({
     defaultValues: {
       initialInvestment: 0,
@@ -145,12 +148,12 @@ export function DynamicForm() {
 
   return (
     <div className="w-full max-w-2xl mx-auto mt-8">
-      <div className="bg-white rounded-lg shadow-lg p-6">
+      <div className="bg-white rounded-lg shadow-lg p-6 h-fit">
         <h2 className="text-xl font-semibold text-gray-900 mb-6">
           Preencha os dados para simulação
         </h2>
         
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <InputField
               label="Idade atual"
@@ -175,19 +178,34 @@ export function DynamicForm() {
             />
           </div>
           
-          <CurrencyInput
-            label="Investimento inicial"
-            name="initialInvestment"
-            placeholder="R$ 0,00"
-            register={register}
-            setValue={setValue}
-            watch={watch}
-            error={errors.initialInvestment}
-            required
-            min={0}
-            max={VALIDATION_CONSTANTS.MAX_AMOUNT}
-          />
-          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <SelectInput
+              label="Sexo"
+              name="sex"
+              options={GENDER_OPTIONS}
+              placeholder="Selecione"
+              register={register}
+              error={errors.sex}
+              required
+            />
+            
+          </div>
+
+          <div className="grid grid-cols-1 gap-4">
+            <CurrencyInput
+                label="Investimento inicial"
+                name="initialInvestment"
+                placeholder="R$ 0,00"
+                register={register}
+                setValue={setValue}
+                watch={watch}
+                error={errors.initialInvestment}
+                required
+                min={0}
+                max={VALIDATION_CONSTANTS.MAX_AMOUNT}
+            />
+          </div>   
+
           {renderScenarioFields()}
           
           <button

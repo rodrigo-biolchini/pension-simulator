@@ -17,7 +17,7 @@ interface CurrencyInputProps<T extends Record<string, unknown>> {
   className?: string;
 }
 
-export function CurrencyInput<T extends Record<string, number | undefined>>({
+export function CurrencyInput<T extends Record<string, unknown>>({
   label,
   name,
   placeholder,
@@ -54,7 +54,7 @@ export function CurrencyInput<T extends Record<string, number | undefined>>({
 
   // Initialize and update display value
   useEffect(() => {
-    const formattedValue = formatCurrency(watchedValue);
+    const formattedValue = formatCurrency(watchedValue as number);
     setDisplayValue(formattedValue);
   }, [watchedValue]);
 
