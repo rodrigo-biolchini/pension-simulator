@@ -3,7 +3,6 @@ import { ScenarioOption } from '@/types';
 // Financial assumptions
 export const FINANCIAL_CONSTANTS = {
   ANNUAL_RETURN_RATE: 0.08, // 8% annual return
-  RETIREMENT_PERIOD_YEARS: 15, // Assumed retirement period
   MONTHS_PER_YEAR: 12,
 } as const;
 

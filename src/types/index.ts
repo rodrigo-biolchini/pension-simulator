@@ -4,6 +4,7 @@ export interface BaseInputs {
   currentAge: number;
   retirementAge: number;
   initialInvestment: number;
+  gender: 'male' | 'female';
 }
 
 export interface TargetAmountInputs extends BaseInputs {
@@ -29,6 +30,8 @@ export interface CalculationResult {
     finalAmount?: number;
     monthlyContribution?: number;
     retirementBalance?: number;
+    lifeExpectancy?: number;
+    retirementPeriodYears?: number;
   };
 }
 

@@ -6,6 +6,7 @@ import {
   RetirementIncomeInputs,
   CalculationResult,
 } from '@/types';
+import { getLifeExpectancy, validateLifeExpectancyInputs } from '@/utils/lifeExpectancy';
 
 /**
  * Calculate compound interest with monthly contributions
@@ -54,10 +55,10 @@ function calculateMonthlyPayment(
 }
 
 /**
- * Validate common inputs
+ * Validate common inputs including gender for life expectancy calculation
  */
 function validateBaseInputs(inputs: BaseInputs): string | null {
-  const { currentAge, retirementAge, initialInvestment } = inputs;
+  const { currentAge, retirementAge, initialInvestment, gender } = inputs;
   
   if (currentAge < 18 || currentAge > 100) {
     return 'Idade atual deve estar entre 18 e 100';
@@ -73,6 +74,12 @@ function validateBaseInputs(inputs: BaseInputs): string | null {
   
   if (initialInvestment < 0) {
     return 'Investimento inicial não pode ser negativo';
+  }
+  
+  // Validate gender for life expectancy calculation
+  const genderValidation = validateLifeExpectancyInputs(retirementAge, gender);
+  if (!genderValidation.isValid) {
+    return genderValidation.error || 'Erro na validação do sexo';
   }
   
   return null;
@@ -91,7 +98,7 @@ export function calculateMonthlyContribution(
       return { success: false, error: baseValidation };
     }
     
-    const { currentAge, retirementAge, initialInvestment, desiredFinalAmount } = inputs;
+    const { currentAge, retirementAge, initialInvestment, desiredFinalAmount, gender } = inputs;
 
     if (desiredFinalAmount <= 0) {
       return { success: false, error: 'Saldo alvo deve ser positivo' };
@@ -105,6 +112,9 @@ export function calculateMonthlyContribution(
     const totalYears = retirementAge - currentAge;
     const totalMonths = totalYears * FINANCIAL_CONSTANTS.MONTHS_PER_YEAR;
     const monthlyRate = FINANCIAL_CONSTANTS.ANNUAL_RETURN_RATE / FINANCIAL_CONSTANTS.MONTHS_PER_YEAR;
+    
+    // Get life expectancy for this person
+    const lifeExpectancy = getLifeExpectancy(retirementAge, gender);
     
     // Calculate required monthly contribution
     const monthlyContribution = calculateMonthlyPayment(
@@ -130,6 +140,8 @@ export function calculateMonthlyContribution(
         totalContributions: monthlyContribution * totalMonths,
         finalAmount: desiredFinalAmount,
         monthlyContribution,
+        lifeExpectancy,
+        retirementPeriodYears: lifeExpectancy,
       },
     };
   } catch {
@@ -153,7 +165,7 @@ export function calculateFinalAmount(
       return { success: false, error: baseValidation };
     }
     
-    const { currentAge, retirementAge, initialInvestment, monthlyContribution } = inputs;
+    const { currentAge, retirementAge, initialInvestment, monthlyContribution, gender } = inputs;
     
     if (monthlyContribution < 0) {
       return { success: false, error: 'Contribuição mensal não pode ser negativa' };
@@ -163,6 +175,9 @@ export function calculateFinalAmount(
     const totalYears = retirementAge - currentAge;
     const totalMonths = totalYears * FINANCIAL_CONSTANTS.MONTHS_PER_YEAR;
     const monthlyRate = FINANCIAL_CONSTANTS.ANNUAL_RETURN_RATE / FINANCIAL_CONSTANTS.MONTHS_PER_YEAR;
+    
+    // Get life expectancy for this person
+    const lifeExpectancy = getLifeExpectancy(retirementAge, gender);
     
     // Calculate final amount
     const finalAmount = calculateFutureValue(
@@ -181,6 +196,8 @@ export function calculateFinalAmount(
         totalContributions: monthlyContribution * totalMonths,
         finalAmount,
         monthlyContribution,
+        lifeExpectancy,
+        retirementPeriodYears: lifeExpectancy,
       },
     };
   } catch {
@@ -204,14 +221,15 @@ export function calculateRetirementPlanning(
       return { success: false, error: baseValidation };
     }
     
-    const { currentAge, retirementAge, initialInvestment, desiredMonthlyIncome } = inputs;
+    const { currentAge, retirementAge, initialInvestment, desiredMonthlyIncome, gender } = inputs;
     
     if (desiredMonthlyIncome <= 0) {
       return { success: false, error: 'Renda mensal desejada deve ser positiva' };
     }
     
-    // Calculate required balance at retirement
-    const retirementMonths = FINANCIAL_CONSTANTS.RETIREMENT_PERIOD_YEARS * FINANCIAL_CONSTANTS.MONTHS_PER_YEAR;
+    // Get actual life expectancy instead of using hardcoded 15 years
+    const lifeExpectancy = getLifeExpectancy(retirementAge, gender);
+    const retirementMonths = lifeExpectancy * FINANCIAL_CONSTANTS.MONTHS_PER_YEAR;
     const monthlyRate = FINANCIAL_CONSTANTS.ANNUAL_RETURN_RATE / FINANCIAL_CONSTANTS.MONTHS_PER_YEAR;
     
     // Calculate present value of annuity (required balance at retirement)
@@ -234,7 +252,7 @@ export function calculateRetirementPlanning(
     if (requiredMonthlyContribution < 0) {
       return { 
         success: false, 
-        error: 'Investimento inicial é insuficiente para a renda mensal desejada' 
+        error: 'Investimento inicial é suficiente para a renda mensal desejada' 
       };
     }
     
@@ -247,6 +265,8 @@ export function calculateRetirementPlanning(
         totalContributions: requiredMonthlyContribution * accumulationMonths,
         retirementBalance: annuityPresentValue,
         monthlyContribution: requiredMonthlyContribution,
+        lifeExpectancy,
+        retirementPeriodYears: lifeExpectancy,
       },
     };
   } catch {

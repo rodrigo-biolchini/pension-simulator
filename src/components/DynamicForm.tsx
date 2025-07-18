@@ -58,6 +58,7 @@ export function DynamicForm() {
           retirementAge: data.retirementAge,
           initialInvestment: data.initialInvestment,
           desiredFinalAmount: data.desiredFinalAmount || 0,
+          gender: data.sex as 'male' | 'female',
         });
         break;
         
@@ -67,6 +68,7 @@ export function DynamicForm() {
           retirementAge: data.retirementAge,
           initialInvestment: data.initialInvestment,
           monthlyContribution: data.monthlyContribution || 0,
+          gender: data.sex as 'male' | 'female',
         });
         break;
         
@@ -76,6 +78,7 @@ export function DynamicForm() {
           retirementAge: data.retirementAge,
           initialInvestment: data.initialInvestment,
           desiredMonthlyIncome: data.desiredMonthlyIncome || 0,
+          gender: data.sex as 'male' | 'female',
         });
         break;
         
