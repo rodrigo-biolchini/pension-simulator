@@ -60,19 +60,19 @@ function validateBaseInputs(inputs: BaseInputs): string | null {
   const { currentAge, retirementAge, initialInvestment } = inputs;
   
   if (currentAge < 18 || currentAge > 100) {
-    return 'Current age must be between 18 and 100';
+    return 'Idade atual deve estar entre 18 e 100';
   }
   
   if (retirementAge < 50 || retirementAge > 100) {
-    return 'Retirement age must be between 50 and 100';
+    return 'Idade de aposentadoria deve estar entre 50 e 100';
   }
   
   if (retirementAge <= currentAge) {
-    return 'Retirement age must be greater than current age';
+    return 'Idade de aposentadoria deve ser maior que a idade atual';
   }
   
   if (initialInvestment < 0) {
-    return 'Initial investment cannot be negative';
+    return 'Investimento inicial não pode ser negativo';
   }
   
   return null;
@@ -92,13 +92,13 @@ export function calculateMonthlyContribution(
     }
     
     const { currentAge, retirementAge, initialInvestment, desiredFinalAmount } = inputs;
-    
+
     if (desiredFinalAmount <= 0) {
-      return { success: false, error: 'Desired final amount must be positive' };
+      return { success: false, error: 'Saldo alvo deve ser positivo' };
     }
     
     if (desiredFinalAmount <= initialInvestment) {
-      return { success: false, error: 'Desired final amount must be greater than initial investment' };
+      return { success: false, error: 'Saldo alvo deve ser maior que o investimento inicial' };
     }
     
     // Calculate periods and rates
@@ -117,7 +117,7 @@ export function calculateMonthlyContribution(
     if (monthlyContribution < 0) {
       return { 
         success: false, 
-        error: 'Target amount is too low for the given initial investment and time period' 
+        error: 'Saldo alvo é muito baixo para o investimento inicial e o período de tempo' 
       };
     }
     
@@ -135,7 +135,7 @@ export function calculateMonthlyContribution(
   } catch {
     return { 
       success: false, 
-      error: 'Calculation error occurred' 
+      error: 'Erro ao calcular' 
     };
   }
 }
@@ -156,7 +156,7 @@ export function calculateFinalAmount(
     const { currentAge, retirementAge, initialInvestment, monthlyContribution } = inputs;
     
     if (monthlyContribution < 0) {
-      return { success: false, error: 'Monthly contribution cannot be negative' };
+      return { success: false, error: 'Contribuição mensal não pode ser negativa' };
     }
     
     // Calculate periods and rates
@@ -186,7 +186,7 @@ export function calculateFinalAmount(
   } catch {
     return { 
       success: false, 
-      error: 'Calculation error occurred' 
+      error: 'Erro ao calcular' 
     };
   }
 }
@@ -207,7 +207,7 @@ export function calculateRetirementPlanning(
     const { currentAge, retirementAge, initialInvestment, desiredMonthlyIncome } = inputs;
     
     if (desiredMonthlyIncome <= 0) {
-      return { success: false, error: 'Desired monthly income must be positive' };
+      return { success: false, error: 'Renda mensal desejada deve ser positiva' };
     }
     
     // Calculate required balance at retirement
@@ -234,7 +234,7 @@ export function calculateRetirementPlanning(
     if (requiredMonthlyContribution < 0) {
       return { 
         success: false, 
-        error: 'Initial investment is sufficient for the desired retirement income' 
+        error: 'Investimento inicial é insuficiente para a renda mensal desejada' 
       };
     }
     
@@ -252,7 +252,7 @@ export function calculateRetirementPlanning(
   } catch {
     return { 
       success: false, 
-      error: 'Calculation error occurred' 
+      error: 'Erro ao calcular' 
     };
   }
 }
