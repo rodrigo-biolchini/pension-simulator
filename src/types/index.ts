@@ -32,6 +32,16 @@ export interface CalculationResult {
     retirementBalance?: number;
     lifeExpectancy?: number;
     retirementPeriodYears?: number;
+    // Input parameters for chart generation
+    inputData?: {
+      currentAge: number;
+      retirementAge: number;
+      initialInvestment: number;
+      gender: 'male' | 'female';
+      desiredFinalAmount?: number;
+      monthlyContribution?: number;
+      desiredMonthlyIncome?: number;
+    };
   };
 }
 

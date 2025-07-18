@@ -142,6 +142,13 @@ export function calculateMonthlyContribution(
         monthlyContribution,
         lifeExpectancy,
         retirementPeriodYears: lifeExpectancy,
+        inputData: {
+          currentAge,
+          retirementAge,
+          initialInvestment,
+          gender,
+          desiredFinalAmount,
+        },
       },
     };
   } catch {
@@ -198,6 +205,13 @@ export function calculateFinalAmount(
         monthlyContribution,
         lifeExpectancy,
         retirementPeriodYears: lifeExpectancy,
+        inputData: {
+          currentAge,
+          retirementAge,
+          initialInvestment,
+          gender,
+          monthlyContribution,
+        },
       },
     };
   } catch {
@@ -267,6 +281,13 @@ export function calculateRetirementPlanning(
         monthlyContribution: requiredMonthlyContribution,
         lifeExpectancy,
         retirementPeriodYears: lifeExpectancy,
+        inputData: {
+          currentAge,
+          retirementAge,
+          initialInvestment,
+          gender,
+          desiredMonthlyIncome,
+        },
       },
     };
   } catch {

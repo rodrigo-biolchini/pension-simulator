@@ -5,6 +5,8 @@ import { FINANCIAL_CONSTANTS } from '@/constants';
 import { useLastResult, useSelectedScenario } from '@/contexts/AppContext';
 import { formatCurrency } from '@/utils/calculations';
 import { CheckCircle, XCircle, TrendingUp, Calendar, DollarSign } from 'lucide-react';
+import { WealthChart } from './WealthChart';
+import { generateWealthProgression } from '@/utils/wealthProjection';
 
 export function ResultsDisplay() {
   const lastResult = useLastResult();
@@ -168,6 +170,24 @@ export function ResultsDisplay() {
         return null;
     }
   };
+
+  // Generate wealth chart data if we have successful results with input data
+  const generateChartData = () => {
+    if (!lastResult.success || !lastResult.details?.inputData || !selectedScenario) {
+      return null;
+    }
+
+    const inputData = lastResult.details.inputData;
+    
+    try {
+      return generateWealthProgression(inputData, selectedScenario);
+    } catch (error) {
+      console.error('Error generating wealth chart data:', error);
+      return null;
+    }
+  };
+
+  const chartData = generateChartData();
   
   return (
     <div className="w-full">
@@ -195,6 +215,16 @@ export function ResultsDisplay() {
           </ul>
         </div>
       </div>
+      
+      {/* Wealth Evolution Chart */}
+      {chartData && lastResult.details?.inputData && (
+        <WealthChart
+          data={chartData}
+          currentAge={lastResult.details.inputData.currentAge}
+          retirementAge={lastResult.details.inputData.retirementAge}
+          title="Evolução do Patrimônio ao Longo da Vida"
+        />
+      )}
     </div>
   );
 } 
