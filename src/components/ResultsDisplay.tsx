@@ -207,9 +207,6 @@ export function ResultsDisplay() {
           </h4>
           <ul className="text-sm text-blue-800 space-y-1">
             <li>• Taxa de retorno real considerada: {FINANCIAL_CONSTANTS.ANNUAL_RETURN_RATE * 100}% ao ano</li>
-            {lastResult.details?.retirementPeriodYears && (
-              <li>• Expectativa de vida na aposentadoria: {lastResult.details.retirementPeriodYears.toFixed(1)} anos</li>
-            )}
             <li>• Valores não consideram inflação</li>
             <li>• Esta é uma simulação para fins educativos</li>
           </ul>
@@ -222,7 +219,7 @@ export function ResultsDisplay() {
           data={chartData}
           currentAge={lastResult.details.inputData.currentAge}
           retirementAge={lastResult.details.inputData.retirementAge}
-          title="Evolução do Patrimônio ao Longo da Vida"
+          title="Evolução do Patrimônio"
         />
       )}
     </div>

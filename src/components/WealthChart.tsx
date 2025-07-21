@@ -11,7 +11,7 @@ import {
   ResponsiveContainer,
   ReferenceLine,
 } from 'recharts';
-import { ChevronDown, ChevronUp, TrendingUp } from 'lucide-react';
+import { ChevronDown, ChevronUp, Clock, DollarSign, TrendingUp } from 'lucide-react';
 import { WealthDataPoint, sampleDataForChart } from '@/utils/wealthProjection';
 import { formatCurrency } from '@/utils/calculations';
 
@@ -48,27 +48,27 @@ function WealthTooltip({ active, payload }: TooltipProps) {
       </div>
       
       <div className="space-y-2">
-        <div className="flex justify-between items-center">
-          <span className="text-sm text-gray-600">Patrimônio:</span>
-          <span className="text-sm font-semibold text-gray-900">
+        <div className="flex items-center gap-4">
+          <span className="text-sm text-gray-600 w-20 flex-shrink-0">Patrimônio:</span>
+          <span className="text-sm font-semibold text-gray-900 flex-1 text-right">
             {formatCurrency(wealth)}
           </span>
         </div>
         
-        <div className="flex justify-between items-center">
-          <span className="text-sm text-gray-600">Fase:</span>
-          <span className={`text-sm font-semibold ${
+        <div className="flex items-center gap-4">
+          <span className="text-sm text-gray-600 w-20 flex-shrink-0">Fase:</span>
+          <span className={`text-sm font-semibold flex-1 text-right ${
             data.phase === 'accumulation' ? 'text-green-600' : 'text-red-600'
           }`}>
             {data.phase === 'accumulation' ? 'Acumulação' : 'Aposentadoria'}
           </span>
         </div>
         
-        <div className="flex justify-between items-center">
-          <span className="text-sm text-gray-600">
-            {data.phase === 'accumulation' ? 'Aporte mensal:' : 'Retirada mensal:'}
+        <div className="flex items-center gap-4">
+          <span className="text-sm text-gray-600 w-20 flex-shrink-0">
+            {data.phase === 'accumulation' ? 'Aporte:' : 'Retirada:'}
           </span>
-          <span className={`text-sm font-semibold ${
+          <span className={`text-sm font-semibold flex-1 text-right ${
             data.phase === 'accumulation' ? 'text-green-600' : 'text-red-600'
           }`}>
             {formatCurrency(Math.abs(data.monthlyFlow))}
@@ -106,7 +106,8 @@ export function WealthChart({
   const maxWealth = Math.max(...chartData.map(d => d.wealth));
   const endAge = Math.max(...chartData.map(d => d.age));
   const accumulationYears = retirementAge - currentAge;
-  const retirementYears = endAge - retirementAge;
+  const retirementPmt = Math.abs(chartData.find(d => d.age > retirementAge)?.monthlyFlow || 0);
+  
   
   // Custom Y-axis formatter
   const formatYAxis = (value: number) => {
@@ -136,13 +137,13 @@ export function WealthChart({
         </div>
         <div className="flex items-center space-x-4 text-sm">
           <div className="flex items-center space-x-1">
-            <div className="w-3 h-3 bg-green-500 rounded"></div>
+            <div className="w-3 h-3 bg-blue-500 rounded"></div>
             <span className="text-gray-600">Acumulação</span>
           </div>
           <div className="flex items-center space-x-1">
-            <div className="w-3 h-3 bg-red-500 rounded"></div>
-            <span className="text-gray-600">Aposentadoria</span>
-          </div>
+              <div className="w-6 h-0 border-t-2 border-red-500 border-dashed"></div>
+              <span className="text-gray-600">Aposentadoria</span>
+            </div>
         </div>
       </div>
 
@@ -157,6 +158,8 @@ export function WealthChart({
               left: 40,
               bottom: 60,
             }}
+            
+            
           >
             <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
             
@@ -171,7 +174,7 @@ export function WealthChart({
               label={{ 
                 value: 'Idade (anos)', 
                 position: 'insideBottom', 
-                offset: -40,
+                offset: -10,
                 style: { textAnchor: 'middle' }
               }}
             />
@@ -184,6 +187,7 @@ export function WealthChart({
                 value: 'Patrimônio', 
                 angle: -90, 
                 position: 'insideLeft',
+                offset: -10,
                 style: { textAnchor: 'middle' }
               }}
             />
@@ -194,11 +198,6 @@ export function WealthChart({
               stroke="#ef4444"
               strokeDasharray="8 4"
               strokeWidth={2}
-              label={{ 
-                value: `Aposentadoria (${retirementAge} anos)`, 
-                position: "top",
-                style: { fontSize: '12px', fill: '#ef4444' }
-              }}
             />
             
             {/* Main wealth line */}
@@ -220,42 +219,42 @@ export function WealthChart({
 
       {/* Key Statistics */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-green-50 rounded-lg p-4">
+        <div className="bg-gray-50 rounded-lg p-4">
           <div className="flex items-center space-x-2 mb-2">
-            <div className="w-3 h-3 bg-green-500 rounded"></div>
-            <span className="text-sm font-medium text-green-900">Fase de Acumulação</span>
+            <Clock className="text-red-600 mr-2" />
+            <span className="text-sm font-medium text-gray-900">Fase de Acumulação</span>
           </div>
-          <div className="text-2xl font-bold text-green-700">
+          <div className="text-lg font-bold text-gray-700">
             {accumulationYears} anos
           </div>
-          <div className="text-sm text-green-600">
+          <div className="text-sm text-gray-600">
             Dos {currentAge} aos {retirementAge} anos
           </div>
         </div>
 
-        <div className="bg-blue-50 rounded-lg p-4">
+        <div className="bg-gray-50 rounded-lg p-4">
           <div className="flex items-center space-x-2 mb-2">
-            <TrendingUp className="w-3 h-3 text-blue-500" />
-            <span className="text-sm font-medium text-blue-900">Patrimônio Máximo</span>
+            <TrendingUp className="text-red-600 mr-2" />
+            <span className="text-sm font-medium text-gray-900">Patrimônio Máximo</span>
           </div>
-          <div className="text-2xl font-bold text-blue-700">
+          <div className="text-lg font-bold text-gray-700">
             {formatCurrency(maxWealth)}
           </div>
-          <div className="text-sm text-blue-600">
+          <div className="text-sm text-gray-600">
             Na aposentadoria
           </div>
         </div>
 
-        <div className="bg-red-50 rounded-lg p-4">
+        <div className="bg-gray-50 rounded-lg p-4">
           <div className="flex items-center space-x-2 mb-2">
-            <div className="w-3 h-3 bg-red-500 rounded"></div>
-            <span className="text-sm font-medium text-red-900">Fase de Aposentadoria</span>
+            <DollarSign className="text-red-600 mr-2" />
+            <span className="text-sm font-medium text-gray-900">Renda Mensal Esperada</span>
           </div>
-          <div className="text-2xl font-bold text-red-700">
-            {Math.round(retirementYears)} anos
+          <div className="text-lg font-bold text-gray-700">
+            {formatCurrency(retirementPmt)}
           </div>
-          <div className="text-sm text-red-600">
-            Até esgotamento dos recursos
+          <div className="text-sm text-gray-600">
+            Na aposentadoria
           </div>
         </div>
       </div>
@@ -266,8 +265,6 @@ export function WealthChart({
         <ul className="text-sm text-blue-800 space-y-1">
           <li>• Durante <strong>{accumulationYears} anos</strong> o patrimônio cresce com aportes mensais e juros compostos</li>
           <li>• O patrimônio atinge o valor máximo de <strong>{formatCurrency(maxWealth)}</strong> aos {retirementAge} anos</li>
-          <li>• Durante a aposentadoria, o patrimônio é usado gradualmente até se esgotar aos {Math.round(endAge)} anos</li>
-          <li>• Esta projeção considera expectativa de vida brasileira e retorno real de 8% ao ano</li>
         </ul>
       </div>
     </div>

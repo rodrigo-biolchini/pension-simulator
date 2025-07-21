@@ -323,22 +323,25 @@ export function sampleDataForChart(
   for (let i = step; i < retirementIndex; i += step) {
     sampledData.push(data[i]);
   }
-  
-  // Always include retirement transition point
   if (retirementIndex > 0) {
     sampledData.push(data[retirementIndex - 1]); // Last accumulation point
     sampledData.push(data[retirementIndex]); // First retirement point
   }
-  
-  // Sample retirement phase
-  for (let i = retirementIndex + step; i < data.length; i += step) {
-    sampledData.push(data[i]);
+
+  let seeRetirement = false; // toggle here to see retirement phase
+  if (seeRetirement) {
+    // Always include retirement transition point
+   
+    
+    // Sample retirement phase
+    for (let i = retirementIndex + step; i < data.length; i += step) {
+      sampledData.push(data[i]);
+    }
+    
+    // Always include last point
+    if (data.length > 1) {
+      sampledData.push(data[data.length - 1]);
+    }
   }
-  
-  // Always include last point
-  if (data.length > 1) {
-    sampledData.push(data[data.length - 1]);
-  }
-  
   return sampledData;
 } 
