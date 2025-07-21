@@ -328,7 +328,7 @@ export function sampleDataForChart(
     sampledData.push(data[retirementIndex]); // First retirement point
   }
 
-  let seeRetirement = false; // toggle here to see retirement phase
+     const seeRetirement = false; // toggle here to see retirement phase
   if (seeRetirement) {
     // Always include retirement transition point
    

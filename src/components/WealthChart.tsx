@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   LineChart,
   Line,
@@ -20,6 +20,7 @@ interface WealthChartProps {
   retirementAge: number;
   currentAge: number;
   title?: string;
+  embedded?: boolean; // When true, shows chart directly without collapsible wrapper
 }
 
 /**
@@ -91,22 +92,39 @@ export function WealthChart({
   data,
   retirementAge,
   currentAge,
-  title = "Evolução do Patrimônio"
+  title = "Evolução do Patrimônio",
+  embedded = false
 }: WealthChartProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   
-  if (!data || data.length === 0) {
+  // Memoize expensive calculations to prevent re-computation on every render
+  const chartMetrics = useMemo(() => {
+    if (!data || data.length === 0) {
+      return null;
+    }
+    // Sample data for performance while preserving key points
+    const chartData = sampleDataForChart(data, 150);
+    
+    // Find key metrics
+    const maxWealth = Math.max(...chartData.map(d => d.wealth));
+    const endAge = Math.max(...chartData.map(d => d.age));
+    const accumulationYears = retirementAge - currentAge;
+    const retirementPmt = Math.abs(chartData.find(d => d.age > retirementAge)?.monthlyFlow || 0);
+    
+    return {
+      chartData,
+      maxWealth,
+      endAge,
+      accumulationYears,
+      retirementPmt
+    };
+  }, [data, retirementAge, currentAge]);
+
+  if (!chartMetrics) {
     return null;
   }
 
-  // Sample data for performance while preserving key points
-  const chartData = sampleDataForChart(data, 150);
-  
-  // Find key metrics
-  const maxWealth = Math.max(...chartData.map(d => d.wealth));
-  const endAge = Math.max(...chartData.map(d => d.age));
-  const accumulationYears = retirementAge - currentAge;
-  const retirementPmt = Math.abs(chartData.find(d => d.age > retirementAge)?.monthlyFlow || 0);
+  const { chartData, maxWealth, endAge, accumulationYears, retirementPmt } = chartMetrics;
   
   
   // Custom Y-axis formatter
@@ -148,8 +166,8 @@ export function WealthChart({
       </div>
 
       {/* Chart Container */}
-      <div className="w-full h-96 bg-gray-50 rounded-lg p-4">
-        <ResponsiveContainer width="100%" height="100%">
+      <div className="w-full h-96 bg-gray-50 rounded-lg">
+        <ResponsiveContainer width="100%" height="100%" debounce={50}>
           <LineChart
             data={chartData}
             margin={{
@@ -158,8 +176,6 @@ export function WealthChart({
               left: 40,
               bottom: 60,
             }}
-            
-            
           >
             <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
             
@@ -209,6 +225,7 @@ export function WealthChart({
               dot={false}
               activeDot={{ r: 6, fill: '#2563eb' }}
               connectNulls={false}
+              isAnimationActive={false}
             />
             
             {/* Custom tooltip */}
@@ -270,6 +287,12 @@ export function WealthChart({
     </div>
   );
 
+  // If embedded (within a tab), show content directly
+  if (embedded) {
+    return <div className="w-full">{chartContent}</div>;
+  }
+
+  // Otherwise, show collapsible interface
   return (
     <div className="w-full mt-6">
       {/* Collapsible Header */}

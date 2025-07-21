@@ -1,16 +1,17 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { FINANCIAL_CONSTANTS } from '@/constants';
 import { useLastResult, useSelectedScenario } from '@/contexts/AppContext';
 import { formatCurrency } from '@/utils/calculations';
-import { CheckCircle, XCircle, TrendingUp, Calendar, DollarSign } from 'lucide-react';
+import { CheckCircle, XCircle, TrendingUp, Calendar, DollarSign, BarChart3, Wallet } from 'lucide-react';
 import { WealthChart } from './WealthChart';
 import { generateWealthProgression } from '@/utils/wealthProjection';
 
 export function ResultsDisplay() {
   const lastResult = useLastResult();
   const selectedScenario = useSelectedScenario();
+  const [activeTab, setActiveTab] = useState<'resumo' | 'evolucao'>('resumo');
   
   if (!lastResult || !selectedScenario) {
     return null;
@@ -191,37 +192,80 @@ export function ResultsDisplay() {
   
   return (
     <div className="w-full">
-      <div className="bg-white border border-green-200 rounded-lg shadow-lg p-6 h-fit">
-        <div className="flex items-center mb-6">
+      <div className="bg-white border border-green-200 rounded-lg shadow-lg h-fit">
+        {/* Header */}
+        <div className="flex items-center p-6 pb-4">
           <CheckCircle className="text-green-600 mr-3" size={24} />
           <h3 className="text-lg lg:text-xl font-semibold text-gray-900">
             Resultado da Simulação
           </h3>
         </div>
         
-        {renderResultContent()}
+        {/* Tab Navigation */}
+        <div className="flex border-b border-gray-200 px-6">
+          <button
+            onClick={() => setActiveTab('resumo')}
+            className={`flex items-center px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
+              activeTab === 'resumo'
+                ? 'text-red-600 border-red-600'
+                : 'text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300'
+            }`}
+          >
+            <Wallet className="w-4 h-4 mr-2" />
+            Resumo
+          </button>
+          <button
+            onClick={() => setActiveTab('evolucao')}
+            className={`flex items-center px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
+              activeTab === 'evolucao'
+                ? 'text-red-600 border-red-600'
+                : 'text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300'
+            }`}
+          >
+            <BarChart3 className="w-4 h-4 mr-2" />
+            Evolução
+          </button>
+        </div>
         
-        <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-          <h4 className="font-semibold text-blue-900 mb-2">
-            Importante:
-          </h4>
-          <ul className="text-sm text-blue-800 space-y-1">
-            <li>• Taxa de retorno real considerada: {FINANCIAL_CONSTANTS.ANNUAL_RETURN_RATE * 100}% ao ano</li>
-            <li>• Valores não consideram inflação</li>
-            <li>• Esta é uma simulação para fins educativos</li>
-          </ul>
+        {/* Tab Content */}
+        <div className="p-6">
+          {activeTab === 'resumo' && (
+            <div>
+              {renderResultContent()}
+              
+              <div className="mt-6 p-4 bg-blue-50 rounded-lg">
+                <h4 className="font-semibold text-blue-900 mb-2">
+                  Importante:
+                </h4>
+                <ul className="text-sm text-blue-800 space-y-1">
+                  <li>• Taxa de retorno real considerada: {FINANCIAL_CONSTANTS.ANNUAL_RETURN_RATE * 100}% ao ano</li>
+                  <li>• Valores não consideram inflação</li>
+                  <li>• Esta é uma simulação para fins educativos</li>
+                </ul>
+              </div>
+            </div>
+          )}
+          
+          {activeTab === 'evolucao' && chartData && lastResult.details?.inputData && (
+            <div>
+              <WealthChart
+                data={chartData}
+                currentAge={lastResult.details.inputData.currentAge}
+                retirementAge={lastResult.details.inputData.retirementAge}
+                title="Evolução do Patrimônio"
+                embedded={true}
+              />
+            </div>
+          )}
+          
+          {activeTab === 'evolucao' && (!chartData || !lastResult.details?.inputData) && (
+            <div className="text-center py-8">
+              <BarChart3 className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+              <p className="text-gray-600">Dados insuficientes para gerar o gráfico de evolução.</p>
+            </div>
+          )}
         </div>
       </div>
-      
-      {/* Wealth Evolution Chart */}
-      {chartData && lastResult.details?.inputData && (
-        <WealthChart
-          data={chartData}
-          currentAge={lastResult.details.inputData.currentAge}
-          retirementAge={lastResult.details.inputData.retirementAge}
-          title="Evolução do Patrimônio"
-        />
-      )}
     </div>
   );
 } 
