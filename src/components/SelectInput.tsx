@@ -52,7 +52,7 @@ export function SelectInput<T extends Record<string, unknown>>({
             w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500
             appearance-none bg-white cursor-pointer
             ${error 
-              ? 'border-red-500 bg-red-50' 
+              ? 'border-[#ea1e25] bg-[#ea1e25]' 
               : 'border-gray-300 bg-white'
             }
           `}

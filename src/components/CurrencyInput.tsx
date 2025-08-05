@@ -125,7 +125,7 @@ export function CurrencyInput<T extends Record<string, unknown>>({
             w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
             text-left font-semibold text-lg
             ${error 
-              ? 'border-red-500 bg-red-50' 
+              ? 'border-[#ea1e25] bg-[#ea1e25]' 
               : 'border-gray-300 bg-white'
             }
           `}
