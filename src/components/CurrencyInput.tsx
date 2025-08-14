@@ -155,10 +155,7 @@ export function CurrencyInput<T extends Record<string, unknown>>({
           {error.message}
         </p>
       )}
-      
-      <p className="mt-1 text-xs text-gray-500">
-        Digite apenas números. O valor será formatado automaticamente.
-      </p>
+    
     </div>
   );
 } 
