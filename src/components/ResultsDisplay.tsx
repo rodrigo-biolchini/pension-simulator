@@ -20,14 +20,14 @@ export function ResultsDisplay() {
   if (!lastResult.success) {
     return (
       <div className="w-full">
-        <div className="bg-[#ea1e25] border border-[#ea1e25] rounded-lg p-6 h-fit">
+        <div className="bg-red-50 border border-red-200 rounded-lg p-6 h-fit">
           <div className="flex items-center mb-4">
-            <XCircle className="text-[#ea1e25] mr-3" size={24} />
-            <h3 className="text-lg font-semibold text-[#ea1e25]">
+            <XCircle className="text-red-600 mr-3" size={24} />
+            <h3 className="text-lg font-semibold text-red-900">
               Erro no Cálculo
             </h3>
           </div>
-          <p className="text-[#ea1e25]">
+          <p className="text-red-700">
             {lastResult.error}
           </p>
         </div>
@@ -56,7 +56,7 @@ export function ResultsDisplay() {
             <div className="grid grid-cols-1 gap-4">
               <div className="bg-gray-50 rounded-lg p-4">
                 <div className="flex items-center mb-2">
-                  <Calendar className="text-[#ea1e25] mr-2" size={20} />
+                  <Calendar className="text-red-600 mr-2" size={20} />
                   <span className="font-medium text-gray-700">Período</span>
                 </div>
                 <p className="text-lg font-semibold text-gray-900">
@@ -69,7 +69,7 @@ export function ResultsDisplay() {
               
               <div className="bg-gray-50 rounded-lg p-4">
                 <div className="flex items-center mb-2">
-                  <DollarSign className="text-[#ea1e25] mr-2" size={20} />
+                  <DollarSign className="text-red-600 mr-2" size={20} />
                   <span className="font-medium text-gray-700">Total Investido</span>
                 </div>
                 <p className="text-lg font-semibold text-gray-900">
@@ -98,7 +98,7 @@ export function ResultsDisplay() {
             <div className="grid grid-cols-1 gap-4">
               <div className="bg-gray-50 rounded-lg p-4">
                 <div className="flex items-center mb-2">
-                  <TrendingUp className="text-[#ea1e25] mr-2" size={20} />
+                  <TrendingUp className="text-red-600 mr-2" size={20} />
                   <span className="font-medium text-gray-700">Contribuição Total</span>
                 </div>
                 <p className="text-lg font-semibold text-gray-900">
@@ -111,7 +111,7 @@ export function ResultsDisplay() {
               
               <div className="bg-gray-50 rounded-lg p-4">
                 <div className="flex items-center mb-2">
-                  <DollarSign className="text-[#ea1e25] mr-2" size={20} />
+                  <DollarSign className="text-red-600 mr-2" size={20} />
                   <span className="font-medium text-gray-700">Rendimento</span>
                 </div>
                 <p className="text-lg font-semibold text-gray-900">
@@ -140,7 +140,7 @@ export function ResultsDisplay() {
             <div className="grid grid-cols-1 gap-4">
               <div className="bg-gray-50 rounded-lg p-4">
                 <div className="flex items-center mb-2">
-                  <DollarSign className="text-[#ea1e25] mr-2" size={20} />
+                  <DollarSign className="text-red-600 mr-2" size={20} />
                   <span className="font-medium text-gray-700">Saldo na Aposentadoria</span>
                 </div>
                 <p className="text-lg font-semibold text-gray-900">
@@ -153,7 +153,7 @@ export function ResultsDisplay() {
               
               <div className="bg-gray-50 rounded-lg p-4">
                 <div className="flex items-center mb-2">
-                  <TrendingUp className="text-[#ea1e25] mr-2" size={20} />
+                  <TrendingUp className="text-red-600 mr-2" size={20} />
                   <span className="font-medium text-gray-700">Total Investido</span>
                 </div>
                 <p className="text-lg font-semibold text-gray-900">
@@ -207,7 +207,7 @@ export function ResultsDisplay() {
             onClick={() => setActiveTab('resumo')}
             className={`flex items-center px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
               activeTab === 'resumo'
-                ? 'text-[#ea1e25] border-[#ea1e25]'
+                ? 'text-red-600 border-red-600'
                 : 'text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300'
             }`}
           >
@@ -218,7 +218,7 @@ export function ResultsDisplay() {
             onClick={() => setActiveTab('evolucao')}
             className={`flex items-center px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
               activeTab === 'evolucao'
-                ? 'text-[#ea1e25] border-[#ea1e25]'
+                ? 'text-red-600 border-red-600'
                 : 'text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300'
             }`}
           >

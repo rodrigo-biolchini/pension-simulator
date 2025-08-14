@@ -5,7 +5,7 @@ import Image from 'next/image';
 
 export function Header() {
   return (
-    <header className="bg-[#ea1e25] text-white py-6 px-4">
+    <header className="bg-red-600 text-white py-6 px-4">
       <div className="container mx-auto">
         <div className="flex items-start justify-between lg:justify-start lg:space-x-8">
           {/* Logo Section */}
